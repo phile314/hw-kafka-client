@@ -35,6 +35,7 @@ library:
   build-tools:
   - c2hs
   exposed-modules:
+  - Kafka.Admin
   - Kafka.Consumer
   - Kafka.Consumer.ConsumerProperties
   - Kafka.Consumer.Subscription

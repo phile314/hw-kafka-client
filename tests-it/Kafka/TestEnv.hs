@@ -10,6 +10,7 @@ import System.Environment
 import System.IO.Unsafe
 
 import Control.Concurrent
+import Kafka.Admin        as A
 import Kafka.Consumer     as C
 import Kafka.Producer     as P
 
@@ -27,6 +28,9 @@ testTopic = unsafePerformIO $
 
 testGroupId :: ConsumerGroupId
 testGroupId = ConsumerGroupId "it_spec_03"
+
+adminProps :: AdminProperties
+adminProps = A.brokersList [brokerAddress]
 
 consumerProps :: ConsumerProperties
 consumerProps =  C.brokersList [brokerAddress]
@@ -47,10 +51,15 @@ testSubscription :: TopicName -> Subscription
 testSubscription t = topics [t]
               <> offsetReset Earliest
 
+mkAdmin :: IO KafkaAdmin
+mkAdmin = do
+  (Right  p) <- newKafkaAdmin adminProps
+  return p
+
 mkProducer :: IO KafkaProducer
 mkProducer = do
-    (Right p) <- newProducer producerProps
-    return p
+  (Right p) <- newProducer producerProps
+  return p
 
 mkConsumerWith :: ConsumerProperties -> IO KafkaConsumer
 mkConsumerWith props = do
@@ -64,6 +73,8 @@ mkConsumerWith props = do
       (RebalanceAssign _) -> putMVar var True
       _                   -> pure ()
 
+specWithAdmin :: String -> SpecWith KafkaAdmin -> Spec
+specWithAdmin s f = beforeAll mkAdmin $ afterAll (void . closeKafkaAdmin) $ describe s f
 
 specWithConsumer :: String -> ConsumerProperties -> SpecWith KafkaConsumer -> Spec
 specWithConsumer s p f = beforeAll (mkConsumerWith p) $ afterAll (void . closeConsumer) $ describe s f

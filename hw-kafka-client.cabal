@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7b5e0c004b38a5cc5a24e8d3c456a457007c9658cccd5f14525a07fc2d2c74b9
+-- hash: 29a125d2e198422a1cae377c5a3867b3785bad9d43a1938dc2d62a4f87171114
 
 name:           hw-kafka-client
 version:        2.5.0
@@ -58,6 +58,7 @@ library
   if os(osx)
     cpp-options: -D__attribute__(A)= -D_Nullable= -D_Nonnull=
   exposed-modules:
+      Kafka.Admin
       Kafka.Consumer
       Kafka.Consumer.ConsumerProperties
       Kafka.Consumer.Subscription
@@ -69,7 +70,6 @@ library
       Kafka.Producer.Types
       Kafka.Types
   other-modules:
-      Kafka.Admin
       Kafka.Admin.AdminProperties
       Kafka.Callbacks
       Kafka.Consumer.Callbacks
@@ -120,6 +120,7 @@ test-suite integration-tests
     , hw-kafka-client
     , monad-loops
   other-modules:
+      Kafka.AdminSpec
       Kafka.IntegrationSpec
       Kafka.TestEnv
       Paths_hw_kafka_client
