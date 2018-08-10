@@ -12,6 +12,7 @@ defaults: &defaults
         KAFKA_ZOOKEEPER_CONNECT: "localhost:2181"
         KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+        KAFKA_DELETE_TOPIC_ENABLE: "true"
 
   steps:
     - checkout
