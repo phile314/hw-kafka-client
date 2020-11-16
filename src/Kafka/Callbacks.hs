@@ -5,6 +5,7 @@ module Kafka.Callbacks
 )
 where
 
+import Data.ByteString (ByteString)
 import Kafka.Internal.RdKafka (rdKafkaConfSetErrorCb, rdKafkaConfSetLogCb, rdKafkaConfSetStatsCb)
 import Kafka.Internal.Setup (HasKafkaConf(..), getRdKafkaConf, Callback(..))
 import Kafka.Types (KafkaError(..), KafkaLogLevel(..))
@@ -39,7 +40,7 @@ logCallback callback =
   let realCb _ = callback . toEnum
   in Callback $ \k -> rdKafkaConfSetLogCb (getRdKafkaConf k) realCb
 
--- | Add a callback for stats.
+-- | Add a callback for stats. The passed bytestring contains an utf8 encoded JSON document and can e.g. be parsed using Data.Aeson.decodeStrict.
 --
 -- ==== __Examples__
 --
@@ -49,7 +50,7 @@ logCallback callback =
 -- >
 -- > myStatsCallback :: String -> IO ()
 -- > myStatsCallback stats = print $ show stats
-statsCallback :: (String -> IO ()) -> Callback
+statsCallback :: (ByteString -> IO ()) -> Callback
 statsCallback callback =
   let realCb _ = callback
   in Callback $ \k -> rdKafkaConfSetStatsCb (getRdKafkaConf k) realCb
