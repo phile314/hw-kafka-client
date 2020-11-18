@@ -26,7 +26,7 @@ import           Control.Monad            (MonadPlus(mplus))
 import           Data.Map                 (Map)
 import qualified Data.Map                 as M
 import           Data.Semigroup           as Sem
-import           Kafka.Internal.Setup     (KafkaConf(..))
+import           Kafka.Internal.Setup     (KafkaConf(..), Callback(..))
 import           Kafka.Types              (KafkaDebug(..), Timeout(..), KafkaCompressionCodec(..), KafkaLogLevel(..), BrokerAddress(..), kafkaDebugToText, kafkaCompressionCodecToText)  
 
 import           Kafka.Producer.Callbacks
@@ -69,8 +69,8 @@ brokersList bs =
 -- * 'errorCallback'
 -- * 'logCallback'
 -- * 'statsCallback'
-setCallback :: (KafkaConf -> IO ()) -> ProducerProperties
-setCallback cb = mempty { ppCallbacks = [cb] }
+setCallback :: Callback -> ProducerProperties
+setCallback (Callback cb) = mempty { ppCallbacks = [cb] }
 
 -- | Sets the logging level.
 -- Usually is used with 'debugOptions' to configure which logs are needed.

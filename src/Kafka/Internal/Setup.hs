@@ -7,6 +7,7 @@ module Kafka.Internal.Setup
 , HasKafka(..)
 , HasKafkaConf(..)
 , HasTopicConf(..)
+, Callback(..)
 , CallbackPollStatus(..)
 , getRdKafka
 , getRdKafkaConf
@@ -45,6 +46,7 @@ newtype KafkaProps = KafkaProps (Map Text Text) deriving (Show, Eq)
 newtype TopicProps = TopicProps (Map Text Text) deriving (Show, Eq)
 newtype Kafka      = Kafka RdKafkaTPtr deriving Show
 newtype TopicConf  = TopicConf RdKafkaTopicConfTPtr deriving Show
+newtype Callback = Callback (KafkaConf -> IO ())
 
 data CallbackPollStatus = CallbackPollEnabled | CallbackPollDisabled deriving (Show, Eq)
 

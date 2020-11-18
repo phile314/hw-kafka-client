@@ -33,7 +33,7 @@ import           Data.Semigroup       as Sem
 import           Data.Text            (Text)
 import qualified Data.Text            as Text
 import           Kafka.Consumer.Types (ConsumerGroupId (..))
-import           Kafka.Internal.Setup (KafkaConf (..))
+import           Kafka.Internal.Setup (KafkaConf (..), Callback(..))
 import           Kafka.Types          (BrokerAddress (..), ClientId (..), KafkaCompressionCodec (..), KafkaDebug (..), KafkaLogLevel (..), Millis (..), kafkaCompressionCodecToText, kafkaDebugToText)
 
 import Kafka.Consumer.Callbacks as X
@@ -116,8 +116,8 @@ clientId (ClientId cid) =
 -- * 'errorCallback'
 -- * 'logCallback'
 -- * 'statsCallback'
-setCallback :: (KafkaConf -> IO ()) -> ConsumerProperties
-setCallback cb = mempty { cpCallbacks = [cb] }
+setCallback :: Callback -> ConsumerProperties
+setCallback (Callback cb) = mempty { cpCallbacks = [cb] }
 
 -- | Set the logging level.
 -- Usually is used with 'debugOptions' to configure which logs are needed.
